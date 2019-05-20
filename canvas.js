@@ -1,21 +1,57 @@
 class Canvas {
   constructor(id) {
-    this.elem    = document.getElementById(id);
-    this.canvas  = this.elem.getContext('2d');
-    this.height  = this.elem.height;
-    this.width   = this.elem.width;
-    this.planets = [];
+    this._elem    = document.getElementById(id);
+    this._canvas  = this._elem.getContext('2d');
+    this._height  = this._elem.height;
+    this._width   = this._elem.width;
+    this._planets = [];
   }
 
   // 1px = 1 Mm
-  generateInitialObjects(amnt) {
-    this.objects = [];
-
+  initPlanets(amnt) {
+    this._planets = [];
     for(let i = 0; i < amnt; i++){
-      let newObj = {
-      Mass = Math.max(60 * Math.random(), 1) * 10;
+      let gen;
+      // do {
+      gen = new Planet({
+        min: 35,
+        max: 45
+      },{
+        min: 1280 * 0.075,
+        max: 1280 * 0.925
+      },{
+        min: 720 * 0.075,
+        max: 720 * 0.925
+      }
+    );
+  // } while (this._planets.filter((elem) => {
+  //   return elem.position.x + elem.radius > gen.position.x - gen.radius && elem.position.y + elem.radius > gen.position.y - gen.radius
+  //   ||     elem.position.x + elem.radius > gen.position.x - gen.radius && elem.position.y - elem.radius < gen.position.y + gen.radius
+  //   ||     elem.position.x - elem.radius < gen.position.x + gen.radius && elem.position.y + elem.radius > gen.position.y - gen.radius
+  //   ||     elem.position.x - elem.radius < gen.position.x + gen.radius && elem.position.y - elem.radius < gen.position.y + gen.radius
+  // }).length === 0)
 
-      this.objects.push()
+
+  this._planets.filter((elem) => {
+
+        let miny = elem.position.y - elem.radius;
+        let maxy = elem.position.y + elem.radius;
+        let minx = elem.position.x - elem.radius;
+        let maxx = elem.position.x + elem.radius;
+        console.log(gen, minx, maxx, miny, maxy);
+        return
+      })
+      this._planets.push(gen);
+    }
+    return this._planets;
+  }
+
+  drawPlanets() {
+    for(let i = 0; i < this._planets.length; i++){
+      let planet = this._planets[i];
+      this._canvas.beginPath();
+      this._canvas.arc(planet.position.x, planet.position.y, planet.radius, 0, 2 * Math.PI);
+      this._canvas.stroke();
     }
   }
 
