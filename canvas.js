@@ -17,11 +17,11 @@ class Canvas {
         min: 35,
         max: 45
       },{
-        min: 1280 * 0.075,
-        max: 1280 * 0.925
+        min: this._width * 0.075,
+        max: this._width * 0.925
       },{
-        min: 720 * 0.075,
-        max: 720 * 0.925
+        min: this._height * 0.075,
+        max: this._height * 0.925
       }
     );
   // } while (this._planets.filter((elem) => {
@@ -30,7 +30,7 @@ class Canvas {
   //   ||     elem.position.x - elem.radius < gen.position.x + gen.radius && elem.position.y + elem.radius > gen.position.y - gen.radius
   //   ||     elem.position.x - elem.radius < gen.position.x + gen.radius && elem.position.y - elem.radius < gen.position.y + gen.radius
   // }).length === 0)
-
+  let genMinx = gen.position
 
   this._planets.filter((elem) => {
 
@@ -39,11 +39,15 @@ class Canvas {
         let minx = elem.position.x - elem.radius;
         let maxx = elem.position.x + elem.radius;
         console.log(gen, minx, maxx, miny, maxy);
-        return
+        return miny
       })
       this._planets.push(gen);
     }
     return this._planets;
+  }
+
+  clear(){
+    this._canvas.clearRect(0, 0, this._width, this._height);
   }
 
   drawPlanets() {

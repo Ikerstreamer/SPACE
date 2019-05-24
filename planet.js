@@ -6,14 +6,8 @@ class Planet {
       x: xRange.min + Math.random() * xRange.max - xRange.min,
       y: yRange.min + Math.random() * yRange.max - yRange.min
     }
-    this._vel = {
-      x: 0,
-      y: 0
-    }
-    this._accel = {
-      x: 0,
-      y: 0
-    }
+    this._vel = new Vector(0, 0);
+    this._accel = new Vector(0, 0);
   }
 
   get position() {
