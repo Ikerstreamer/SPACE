@@ -1,27 +1,70 @@
 class Vector {
-  constructor(x, y){
-    this.x = x;
-    this.y = y;
+  constructor(x, y) {
+    this.x = x || 0;
+    this.y = y || 0;
   }
-  get magnitude () {
-    let signx = this.x/Math.abs(this.x);
-    let signy = this.y/Math.abs(this.y);
-    let ang = isNaN(Math.atan(this.y / this.x)) ? 0 : Math.atan(this.y / this.x);
+
+  get magnitude() {
+    let ang = 0;
+    if (this.x > 0) {
+      ang = Math.PI * 0.5 - Math.atan(this.y / this.x);
+    } else if (this.x < 0) {
+      ang = Math.PI * 1.5 - Math.atan(this.y / this.x);
+    } else if (this.x === 0) {
+      ang = this.y > 0 ? 0 : Math.PI;
+    }
     // UP = 0 RIGHT = pi/2 DOWN = pi LEFT = 3/2pi
     return {
       theta: ang,
       value: Math.sqrt(Math.pow(this.y, 2) + Math.pow(this.x, 2))
-    }
+    };
   }
 
-  add(other){
+  get copy() {
+    return new Vector(this.x, this.y);
+  }
+
+  set magnitude(newMag) {
+    let hyp = newMag.value;
+    let thetaX = newMag.thetaX;
+    let thetaY = newMag.thetaY;
+    this.x = Math.cos(thetaX) * hyp;
+    this.y = Math.sin(thetaY) * hyp;
+  }
+
+  add(other) {
     this.x += other.x;
     this.y += other.y;
+    return this;
   }
 
-  multi(amnt){
-    let newHyp  = this.magnitude.value * amnt;
-    this.x = Math.cos(this.magnitude.theta) * newHyp;
+  sub(other) {
+    this.x -= other.x;
+    this.y -= other.y;
+    return this;
+  }
+
+  magnify(amnt) {
+    let newHyp = this.magnitude.value * amnt;
+    this.x = Math.sin(this.magnitude.theta) * newHyp;
     this.y = Math.cos(this.magnitude.theta) * newHyp;
+    return this;
+  }
+
+  multi(amnt) {
+    this.x *= amnt;
+    this.y *= amnt;
+    return this;
+  }
+
+  divide(amnt) {
+    this.x /= amnt;
+    this.y /= amnt;
+    return this;
+  }
+
+  inverseY() {
+    this.y = -this.y;
+    return this;
   }
 }

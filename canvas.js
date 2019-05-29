@@ -1,62 +1,69 @@
 class Canvas {
   constructor(id) {
-    this._elem    = document.getElementById(id);
-    this._canvas  = this._elem.getContext('2d');
-    this._height  = this._elem.height;
-    this._width   = this._elem.width;
-    this._planets = [];
+    this._elem = document.getElementById(id);
+    this._canvas = this._elem.getContext('2d');
+    this.height = this._elem.height;
+    this.width = this._elem.width;
   }
 
-  // 1px = 1 Mm
-  initPlanets(amnt) {
-    this._planets = [];
-    for(let i = 0; i < amnt; i++){
-      let gen;
-      // do {
-      gen = new Planet({
-        min: 35,
-        max: 45
-      },{
-        min: this._width * 0.075,
-        max: this._width * 0.925
-      },{
-        min: this._height * 0.075,
-        max: this._height * 0.925
-      }
-    );
-  // } while (this._planets.filter((elem) => {
-  //   return elem.position.x + elem.radius > gen.position.x - gen.radius && elem.position.y + elem.radius > gen.position.y - gen.radius
-  //   ||     elem.position.x + elem.radius > gen.position.x - gen.radius && elem.position.y - elem.radius < gen.position.y + gen.radius
-  //   ||     elem.position.x - elem.radius < gen.position.x + gen.radius && elem.position.y + elem.radius > gen.position.y - gen.radius
-  //   ||     elem.position.x - elem.radius < gen.position.x + gen.radius && elem.position.y - elem.radius < gen.position.y + gen.radius
-  // }).length === 0)
-  let genMinx = gen.position
-
-  this._planets.filter((elem) => {
-
-        let miny = elem.position.y - elem.radius;
-        let maxy = elem.position.y + elem.radius;
-        let minx = elem.position.x - elem.radius;
-        let maxx = elem.position.x + elem.radius;
-        console.log(gen, minx, maxx, miny, maxy);
-        return miny
-      })
-      this._planets.push(gen);
-    }
-    return this._planets;
+  clear() {
+    this._canvas.clearRect(0, 0, this.width, this.height);
   }
 
-  clear(){
-    this._canvas.clearRect(0, 0, this._width, this._height);
+  canvasPos(pos) {
+    return pos.copy.inverseY().add(new Vector(this.width / 2, this.height / 2))
   }
 
-  drawPlanets() {
-    for(let i = 0; i < this._planets.length; i++){
-      let planet = this._planets[i];
+  drawPlanets(planets) {
+    let colors = ["#2E86C1", "#CD53FD", "#F6FD00", "#6E031F", "#036E2D", "#55A28B"]
+    for (let i = 0; i < planets.length; i++) {
+      let planet = planets[i];
       this._canvas.beginPath();
-      this._canvas.arc(planet.position.x, planet.position.y, planet.radius, 0, 2 * Math.PI);
+      this._canvas.strokeStyle = "#000000";
+      this._canvas.lineWidth = 1;
+      this._canvas.arc(this.canvasPos(planet.position).x, this.canvasPos(planet.position).y, planet.radius, 0, 2 * Math.PI);
       this._canvas.stroke();
+      this._canvas.fillStyle = colors[planet.id - 1];
+      this._canvas.fill();
     }
+  }
+
+  drawPlayer(player) {
+    this._canvas.lineWidth = 1;
+    this._canvas.fillStyle = "#c0c0c0";
+    this._canvas.fillRect(this.canvasPos(player.position).x - 5, this.canvasPos(player.position).y - 5, 10, 10);
+  }
+  // drawPlanets(planets) {
+  //   for (let i = 0; i < planets.length; i++) {
+  //     let planet = planets[i];
+  //     let elem = document.createElement("img");
+  //     elem.src = "planets/" + planet.id + ".png";
+  //     console.log(elem);
+  //     this._canvas.drawImage(elem, this.canvasPos(planet).x, this.canvasPos(planet).y, planets.radius, planet.radius);
+  //   }
+  // }
+
+  drawAccel(planet) {
+    this._canvas.beginPath();
+    this._canvas.lineWidth = 2;
+    this._canvas.strokeStyle = "#FF0000";
+    let startPos = this.canvasPos(planet.position);
+    let endPos = this.canvasPos(planet.position.copy.add(planet.acceleration.copy.multi(1e6)));
+    this._canvas.moveTo(startPos.x, startPos.y);
+    this._canvas.lineTo(endPos.x, endPos.y);
+    this._canvas.arc(endPos.x, endPos.y, 2, 0, 2 * Math.PI);
+    this._canvas.stroke();
+    this._canvas.fillStyle = "#FF0000";
+    this._canvas.fill();
+  }
+
+  drawCenter(pos) {
+    this._canvas.beginPath();
+    this._canvas.strokeStyle = "#000000";
+    this._canvas.arc(this.canvasPos(pos).x, this.canvasPos(pos).y, 1, 0, 2 * Math.PI);
+    this._canvas.stroke();
+    this._canvas.fillStyle = "#000000";
+    this._canvas.fill();
   }
 
 }
