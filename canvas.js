@@ -1,4 +1,5 @@
 class Canvas {
+  //constructor for the canvas class
   constructor(id) {
     this._elem = document.getElementById(id);
     this._canvas = this._elem.getContext('2d');
@@ -6,14 +7,17 @@ class Canvas {
     this.width = this._elem.width;
   }
 
+  //clears the canvas
   clear() {
     this._canvas.clearRect(0, 0, this.width, this.height);
   }
 
+  //transforms a (0,0) centered point to a (width/2, height/2) centered point
   canvasPos(pos) {
     return pos.copy.inverseY().add(new Vector(this.width / 2, this.height / 2))
   }
 
+  //draws all the planets based on their stored position
   drawPlanets(planets) {
     let colors = ["#2E86C1", "#CD53FD", "#F6FD00", "#6E031F", "#036E2D", "#55A28B"]
     for (let i = 0; i < planets.length; i++) {
@@ -28,21 +32,14 @@ class Canvas {
     }
   }
 
+  //draws the player
   drawPlayer(player) {
     this._canvas.lineWidth = 1;
     this._canvas.fillStyle = "#c0c0c0";
     this._canvas.fillRect(this.canvasPos(player.position).x - 5, this.canvasPos(player.position).y - 5, 10, 10);
   }
-  // drawPlanets(planets) {
-  //   for (let i = 0; i < planets.length; i++) {
-  //     let planet = planets[i];
-  //     let elem = document.createElement("img");
-  //     elem.src = "planets/" + planet.id + ".png";
-  //     console.log(elem);
-  //     this._canvas.drawImage(elem, this.canvasPos(planet).x, this.canvasPos(planet).y, planets.radius, planet.radius);
-  //   }
-  // }
 
+  //utility function for mapping the acceleration of the planets
   drawAccel(planet) {
     this._canvas.beginPath();
     this._canvas.lineWidth = 2;
@@ -56,7 +53,7 @@ class Canvas {
     this._canvas.fillStyle = "#FF0000";
     this._canvas.fill();
   }
-
+  //draws a dot at the center of mass of the system
   drawCenter(pos) {
     this._canvas.beginPath();
     this._canvas.strokeStyle = "#000000";

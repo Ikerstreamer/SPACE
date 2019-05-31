@@ -22,6 +22,10 @@ class Player {
     return this._accel;
   }
 
+  set acceleration(value) {
+    this._accel = value;
+  }
+
   get gravity() {
     return this._gravity;
   }
@@ -31,6 +35,7 @@ class Player {
   }
 
   playerMovement(delta, events) {
+    this.acceleration = new Vector(0, 0);
     if (events.left == true) {
       this.acceleration.add(new Vector(-0.00804672, 0));
     }

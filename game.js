@@ -45,7 +45,7 @@ let Game = new class Game {
     this.canvas.drawCenter(this.gravity.centerOfMass);
     this.gravity.updateSystem(this.planets, this.player);
     for (let i = 0; i < this.planets.length; i++) {
-      this.canvas.drawAccel(this.planets[i]);
+      //this.canvas.drawAccel(this.planets[i]);
       this.planets[i].acceleration = this.gravity.accelerationOf(this.planets[i]);
       this.planets[i].update(delta);
     }

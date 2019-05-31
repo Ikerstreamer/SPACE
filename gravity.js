@@ -27,7 +27,7 @@ class Gravity {
   }
 
   accelerationOf(planet) {
-    let numerator = (this.systemMass - planet.mass) * 6.673e-11;
+    let numerator = (this.systemMass - planet.mass) * 6.673e-8;
     let dist = this.modifyCenterOfMass(planet).sub(planet.position);
     let oldHyp = dist.magnitude.value;
     let newHyp = numerator / Math.pow(dist.magnitude.value * 1e6, 2) * 1e6;
